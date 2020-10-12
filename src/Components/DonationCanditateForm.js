@@ -1,7 +1,8 @@
 import { TextField, Grid, withStyles, Select, FormControl, InputLabel, MenuItem, Button, FormHelperText} from "@material-ui/core";
 import React, {useState} from "react";
 import useForm from "./useForm";
-
+import { connect } from "react-redux";
+import * as actions from "../Actions/dCandidates";
 
 const styles = theme => ({
     root:{
@@ -73,7 +74,8 @@ const DonationCandidatesForm = ({classes, ...props}) => {
       e.preventDefault()
       if(validate())
       {
-          window.alert('Validation succeded!')
+          props.createDCandidate(values,() =>{window.alert('inserted.')})
+          
       }
   }
 
@@ -161,7 +163,18 @@ const DonationCandidatesForm = ({classes, ...props}) => {
         </Grid>
 
 
-    </form> );
+    </form> 
+    );
 }
+
+const mapStateToProps = state=> ({
+    dCandidateList: state.dCandidate.list
+})
+
+const mapActionToProps = {
+createDCandidate : actions.create,
+updateDCandidate : actions.update
+}
+
  
-export default withStyles(styles) (DonationCandidatesForm);
+export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(DonationCandidatesForm));
