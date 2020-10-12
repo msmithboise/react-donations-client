@@ -36,7 +36,7 @@ const DonationCandidatesForm = ({classes, ...props}) => {
     //validate()
     //validate({fullName: 'Jenny'})
     const validate = (fieldValues = values) =>{
-        let temp={}
+        let temp={...errors}
         if('fullName' in fieldValues)
         temp.fullName = fieldValues.fullName?"": "This field is required."
         if('bloodGroup' in fieldValues)
@@ -60,8 +60,9 @@ const DonationCandidatesForm = ({classes, ...props}) => {
         setValues,
         errors,
         setErrors,
-        handleInputChange
-    } = useForm(initialFieldValues, validate)
+        handleInputChange,
+        resetForm
+    } = useForm(initialFieldValues, validate, props.setCurrentId)
 
     // material ui select dropdown
     const inputLabel = React.useRef(null);
@@ -79,14 +80,17 @@ const DonationCandidatesForm = ({classes, ...props}) => {
           else
           props.updateDCandidate(props.currentId,values, () =>{window.alert('updated.')})
       }
+
+      resetForm()
   }
 
   useEffect(() => {
-    if (props.currentId!=0) 
+    if (props.currentId!=0) {
        setValues({
            ...props.dCandidateList.find(x => x.id==props.currentId)
        }) 
-    
+       setErrors({})
+    }
   }, [props.currentId])
 
     return ( <form autoComplete="off" noValidate className={classes.root} onSubmit={handleSubmit}>
@@ -165,7 +169,7 @@ const DonationCandidatesForm = ({classes, ...props}) => {
                    </Button>
                    <Button
                variant="contained"
-               color="default" className={classes.smMargin}>
+               color="default" className={classes.smMargin} onClick={resetForm}>
                    Reset
                    </Button>    
             </div>
