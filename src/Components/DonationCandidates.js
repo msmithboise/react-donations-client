@@ -5,6 +5,7 @@ import * as actions from "../Actions/dCandidates";
 import DonationCandidatesForm from "./DonationCanditateForm";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { useToasts } from "react-toast-notifications";
 
 const styles = theme => ({
     root:{
@@ -28,6 +29,16 @@ const [currentId, setCurrentId] = useState(0)
     useEffect(() =>{
 props.fetchAllDCandidates()
     }, [])// componentDidMount
+
+        //Toast msg.
+
+        const {addToast} = useToasts()
+
+
+const onDelete = id =>{
+    if(window.confirm('Are you sure you want to delete this record?'))
+    props.deleteDCandidate(id, ()=>  addToast("Deleted Succesfully!", {appearance: 'info'}))
+}
 
     return (
         <Paper className = {classes.paper} elevation={3}>
@@ -61,7 +72,7 @@ props.fetchAllDCandidates()
                                     <TableCell>
                                         <ButtonGroup variant="text">
                                             <Button><EditIcon color="primary" onClick={()=>{setCurrentId(record.id)}}/></Button>
-                                            <Button><DeleteIcon color="secondary"/></Button>
+                                            <Button><DeleteIcon color="secondary" onClick={()=> onDelete(record.id)}/></Button>
                                         </ButtonGroup>
                                     </TableCell>
                                 </TableRow>)
@@ -82,7 +93,8 @@ const mapStateToProps = state=> ({
 })
 
 const mapActionToProps = {
-    fetchAllDCandidates : actions.fetchAll
+    fetchAllDCandidates : actions.fetchAll,
+    deleteDCandidate: actions.Delete
 }
 
 
