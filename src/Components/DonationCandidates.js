@@ -1,8 +1,10 @@
-import { Grid,Paper, TableContainer, TableHead, TableRow, TableCell, Table, TableBody, withStyles} from "@material-ui/core";
-import React, { Component, useState, useEffect } from "react"
+import { Grid,Paper, TableContainer, TableHead, TableRow, TableCell, Table, TableBody, withStyles, ButtonGroup, Button} from "@material-ui/core";
+import React, { Component, useState, useEffect, setState } from "react"
 import { connect } from "react-redux";
 import * as actions from "../Actions/dCandidates";
 import DonationCandidatesForm from "./DonationCanditateForm";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const styles = theme => ({
     root:{
@@ -19,8 +21,9 @@ const styles = theme => ({
 //props.classes
 // const
 
-const DonationCandidates = ({classes,...props}) => {
+const DonationCandidates = ({classes, ...props}) => {
 
+const [currentId, setCurrentId] = useState(0)
 
     useEffect(() =>{
 props.fetchAllDCandidates()
@@ -30,7 +33,7 @@ props.fetchAllDCandidates()
         <Paper className = {classes.paper} elevation={3}>
             <Grid container>
                 <Grid item xs={6}>
-                    <DonationCandidatesForm/>
+                    <DonationCandidatesForm {...({ currentId, setCurrentId})} />
                 </Grid>
                 <Grid item xs={6}>
                      <TableContainer>
@@ -55,6 +58,12 @@ props.fetchAllDCandidates()
                                     <TableCell>{record.fullName}</TableCell>
                                     <TableCell>{record.mobile}</TableCell>
                                     <TableCell>{record.bloodGroup}</TableCell>
+                                    <TableCell>
+                                        <ButtonGroup variant="text">
+                                            <Button><EditIcon color="primary" onClick={()=>{setCurrentId(record.id)}}/></Button>
+                                            <Button><DeleteIcon color="secondary"/></Button>
+                                        </ButtonGroup>
+                                    </TableCell>
                                 </TableRow>)
                             })
                         }

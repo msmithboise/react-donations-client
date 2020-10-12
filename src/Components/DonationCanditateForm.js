@@ -1,5 +1,5 @@
 import { TextField, Grid, withStyles, Select, FormControl, InputLabel, MenuItem, Button, FormHelperText} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import useForm from "./useForm";
 import { connect } from "react-redux";
 import * as actions from "../Actions/dCandidates";
@@ -78,6 +78,14 @@ const DonationCandidatesForm = ({classes, ...props}) => {
           
       }
   }
+
+  useEffect(() => {
+    if (props.currentId!=0) 
+       setValues({
+           ...props.dCandidateList.find(x => x.id==props.currentId)
+       }) 
+    
+  }, [props.currentId])
 
     return ( <form autoComplete="off" noValidate className={classes.root} onSubmit={handleSubmit}>
 
