@@ -1,4 +1,4 @@
-import { TextField, Grid, withStyles, Select, FormControl, InputLabel, MenuItem, Button} from "@material-ui/core";
+import { TextField, Grid, withStyles, Select, FormControl, InputLabel, MenuItem, Button, FormHelperText} from "@material-ui/core";
 import React, {useState} from "react";
 import useForm from "./useForm";
 
@@ -31,16 +31,24 @@ const initialFieldValues = {
 
 const DonationCandidatesForm = ({classes, ...props}) => {
 
-    const validate = () =>{
+    //validate()
+    //validate({fullName: 'Jenny'})
+    const validate = (fieldValues = values) =>{
         let temp={}
-        temp.fullName = values.fullName?"": "This field is required."
-        temp.bloodGroup = values.bloodGroup?"": "This field is required."
-        temp.mobile = values.mobile?"": "This field is required."
-        temp.email = (/^$|.+@.+..+/).test(values.email)?"": "Email is not valid."
+        if('fullName' in fieldValues)
+        temp.fullName = fieldValues.fullName?"": "This field is required."
+        if('bloodGroup' in fieldValues)
+        temp.bloodGroup = fieldValues.bloodGroup?"": "This field is required."
+        if('mobile' in fieldValues)
+        temp.mobile = fieldValues.mobile?"": "This field is required."
+        if('email' in fieldValues)
+        temp.email = (/^$|.+@.+..+/).test(fieldValues.email)?"": "Email is not valid."
         setErrors({
             ...temp
         })
         
+        if (fieldValues == values) 
+            
         return Object.values(temp).every(x => x=="")
 
     }
@@ -51,7 +59,7 @@ const DonationCandidatesForm = ({classes, ...props}) => {
         errors,
         setErrors,
         handleInputChange
-    } = useForm(initialFieldValues)
+    } = useForm(initialFieldValues, validate)
 
     // material ui select dropdown
     const inputLabel = React.useRef(null);
@@ -78,6 +86,9 @@ const DonationCandidatesForm = ({classes, ...props}) => {
             label="Full Name"
             value={values.fullName}
             onChange={handleInputChange}
+            error={false}
+            helperText = {errors.fullName}
+            {...(errors.fullName && {error:true, helperText:errors.fullName})}
             />
              <TextField
             name="email"
@@ -85,9 +96,11 @@ const DonationCandidatesForm = ({classes, ...props}) => {
             label="Email"
             value={values.email}
             onChange={handleInputChange}
+            {...(errors.email && {error:true, helperText:errors.email})}
             />
              <FormControl variant="outlined"
              className={classes.formControl}
+             {...(errors.bloodGroup && {error:true})}
              >
                  <InputLabel ref={inputLabel}>Blood Group</InputLabel>
                  <Select
@@ -106,7 +119,7 @@ const DonationCandidatesForm = ({classes, ...props}) => {
                      <MenuItem value="O+">O +ve </MenuItem>
                      <MenuItem value="O-">O -ve </MenuItem>
                      </Select>
-                  
+                    {errors.bloodGroup && <FormHelperText>{errors.bloodGroup}</FormHelperText>}
              </FormControl>
             </Grid>
             <Grid item xs={6}>
@@ -116,6 +129,7 @@ const DonationCandidatesForm = ({classes, ...props}) => {
             label="Mobile"
             value={values.mobile}
             onChange={handleInputChange}
+            {...(errors.mobile && {error:true, helperText:errors.mobile})}
             /> <TextField
             name="age"
             variant="outlined"
