@@ -7,11 +7,9 @@ export const ACTION_TYPES = {
     FETCH_ALL: 'FETCH_ALL'
 }
 
-const formatData = data => ({
+const formatData = data =>({
     ...data,
-    age: parseInt(data.age?data.age: 0)
-
-})
+    age: parseInt(data.age? data.age: 0)})
 
 export const fetchAll = () =>
     dispatch => {
@@ -60,7 +58,7 @@ export const fetchAll = () =>
          //Delete
          export const Delete = (id, onSuccess) =>
          dispatch =>{
-             data = formatData(data)
+     
              api.dCandidate().delete(id)
              .then(res =>{
                  dispatch({
