@@ -9,7 +9,7 @@ export const ACTION_TYPES = {
 
 export const fetchAll = () =>
     dispatch => {
-        api.dCandidate()
+        api.dCandidate().fetchAll()
         .then(response => {
             dispatch({
                 type: ACTION_TYPES.FETCH_ALL,
