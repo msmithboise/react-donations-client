@@ -74,8 +74,10 @@ const DonationCandidatesForm = ({classes, ...props}) => {
       e.preventDefault()
       if(validate())
       {
+         if(props.currentId==0)
           props.createDCandidate(values,() =>{window.alert('inserted.')})
-          
+          else
+          props.updateDCandidate(props.currentId,values, () =>{window.alert('updated.')})
       }
   }
 
