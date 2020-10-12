@@ -11,6 +11,7 @@ export const fetchAll = () =>
     dispatch => {
         api.dCandidate().fetchAll()
         .then(response => {
+            console.log(response)
             dispatch({
                 type: ACTION_TYPES.FETCH_ALL,
                 payload: response.data
