@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import useForm from "./useForm";
 import { connect } from "react-redux";
 import * as actions from "../Actions/dCandidates";
+import { useToasts } from "react-toast-notifications";
 
 const styles = theme => ({
     root:{
@@ -32,6 +33,12 @@ const initialFieldValues = {
 }
 
 const DonationCandidatesForm = ({classes, ...props}) => {
+
+
+    //Toast msg.
+
+    const {addToast} = useToasts()
+
 
     //validate()
     //validate({fullName: 'Jenny'})
@@ -75,13 +82,17 @@ const DonationCandidatesForm = ({classes, ...props}) => {
       e.preventDefault()
       if(validate())
       {
+          const onSuccess = () => { 
+              resetForm()
+          addToast("Submitted Succesfully!", {appearance: 'success'})
+          }
          if(props.currentId==0)
-          props.createDCandidate(values,() =>{window.alert('inserted.')})
+          props.createDCandidate(values,onSuccess)
           else
-          props.updateDCandidate(props.currentId,values, () =>{window.alert('updated.')})
+          props.updateDCandidate(props.currentId,values,onSuccess)
       }
 
-      resetForm()
+      
   }
 
   useEffect(() => {
